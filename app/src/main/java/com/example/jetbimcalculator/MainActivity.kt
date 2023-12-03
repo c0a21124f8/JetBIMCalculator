@@ -31,7 +31,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import com.example.jetbimcalculator.ui.theme.MainViewModel
-import android.util.Log
+
 
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +39,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("Test", viewModel.test)
         setContent {
             JetBIMCalculatorTheme {
                 // A surface container using the 'background' color from the theme
@@ -47,7 +46,61 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainContent()
+                    Column(
+                        horizontalAlignment= Alignment.Start,
+                        modifier = Modifier.padding(20.dp)
+                    ){
+                        Text(
+                            text = "BMI計算アプリ",
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        // 身長
+                        PinkLabeledTextFiled(
+                            value = viewModel.height,
+                            // itはユーザーが打ち込んだ値
+                            onValueChange = { viewModel.height = it },
+                            label = "身長(cm)",
+                            placeholder = "170"
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        // 体重
+                        PinkLabeledTextFiled(
+                            value = viewModel.weight,
+                            onValueChange = { viewModel.weight = it },
+                            label = "体重(kg)",
+                            placeholder = "65"
+                        )
+                        Spacer(modifier = Modifier.height(30.dp))
+
+                        // 計算する
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(Color(0xFFF85F6A)),
+                            onClick = { viewModel.calculateBMI() }
+                        ) {
+                            Text(
+                                text = "計算する",
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        // 結果表示テキスト
+                        Text(
+                            text = "あなたのBIMは${viewModel.bmi}です",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            fontSize = 24.sp,
+                            color = Color.Gray,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }
@@ -64,7 +117,6 @@ fun GreetingPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainContent() {
     Column(
@@ -123,7 +175,8 @@ fun MainContent() {
     }
 }
 
-@ExperimentalMaterial3Api
+// TextFieldを使うとき↓の一文つける
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PinkLabeledTextFiled(
     value: String,
@@ -142,9 +195,11 @@ fun PinkLabeledTextFiled(
             modifier = Modifier.fillMaxWidth(),
             value = value,
             onValueChange = onValueChange,
-            // 背景色設定
+            // 色設定
             colors = TextFieldDefaults.textFieldColors(
-                Color.Transparent
+                // 多分背景色
+                containerColor = Color.Transparent,
+                textColor = Color.Black,
             ),
             // 薄文字のヒント
             placeholder = { Text(text = placeholder,color = Color.Gray) },
@@ -155,4 +210,5 @@ fun PinkLabeledTextFiled(
         )
     }
 }
+
 
