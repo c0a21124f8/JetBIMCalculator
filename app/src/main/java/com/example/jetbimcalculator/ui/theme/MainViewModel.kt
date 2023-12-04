@@ -19,7 +19,7 @@ class MainViewModel: ViewModel() {
     fun calculateBMI() {
         // 数字に変換できないならnullを返す（nullの場合0fを返す）
         val heightNumber = height.toFloatOrNull()?.div(100) ?: 0f
-        val weightNumber = height.toFloatOrNull() ?: 0f
+        val weightNumber = weight.toFloatOrNull() ?: 0f
 
         // どちらも整数である場合
         bmi = if (heightNumber > 0f && weightNumber > 0f) {
